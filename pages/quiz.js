@@ -1,30 +1,54 @@
-import React from 'react'
-import styled from 'styled-components';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
+import React from 'react';
 
 import QuizBackground from '../src/components/QuizBackground';
 import QuizContainer from '../src/components/QuizContainer';
 import QuizLogo from '../src/components/QuizLogo';
-import Widget from '../src/components/Widget';
-import Footer from '../src/components/Footer';
-import GitHubCorner from '../src/components/GitHubCorner';
+import QuestionWidget, { LoadingWidget, ResultWidget } from '../src/components/QuestionWidget';
 
-import db from '../db.json'
+import db from '../db.json';
 
-const quiz = () => {
+const screenStates = {
+  quiz: 'QUIZ',
+  loading: 'LOADING',
+  result: 'RESULT',
+};
+
+function QuizPage() {
+  const [screenState, setScreenState] = React.useState(screenStates.loading);
+
+  const [questionIndex, setQuestionIndex] = React.useState(0);
+
+  function handleClick(event) {
+    event.preventDefault();
+    const nextQuestion = questionIndex + 1;
+    if (nextQuestion < db.questions.length) {
+      setQuestionIndex((question) => question + 1);
+    } else {
+      setScreenState(screenStates.result);
+    }
+  }
+
+  React.useEffect(() => {
+    setTimeout(() => setScreenState(screenStates.quiz), 1 * 1000);
+  }, []);
+
   return (
     <QuizBackground backgroundImage={db.bg}>
       <QuizContainer>
         <QuizLogo />
-        <Widget>
-          <Widget.Header>
-            <h1>Pergunta 1 a 5</h1>
-          </Widget.Header>
-        </Widget>
+        {screenState === screenStates.quiz && (
+        <QuestionWidget
+          questionIndex={questionIndex}
+          question={db.questions[questionIndex]}
+          totalQuestions={db.questions.length}
+          handleClick={handleClick}
+        />
+        )}
+        {screenState === screenStates.loading && <LoadingWidget />}
+        {screenState === screenStates.result && <ResultWidget />}
       </QuizContainer>
     </QuizBackground>
-  )
+  );
 }
 
-export default quiz;
+export default QuizPage;

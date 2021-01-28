@@ -32,23 +32,11 @@ export default function App({ Component, pageProps }) {
   return (
     <>
     <Head>
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet" />
-    <title>Quiz - Viajando pelo mundo!</title>
-    <meta name="title" content="Quiz - Viajando pelo mundo!" />
-    <meta name="description" content="" />
-    
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://aluraquiz-base.mpradofilho.vercel.app/" />
-    <meta property="og:title" content="Quiz - Viajando pelo mundo!" />
-    <meta property="og:description" content="" />
-    <meta property="og:image" content={db.bg} />
-    
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://aluraquiz-base.mpradofilho.vercel.app/" />
-    <meta property="twitter:title" content="Quiz - Viajando pelo mundo!" />
-    <meta property="twitter:description" content="" />
-    <meta property="twitter:image" content="" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" />
+      <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet" />
+      <meta property="og:url" content="https://aluraquiz-base.mpradofilho.vercel.app/" />
+      <meta property="og:image" content={db.bg} />
+      <title>Quiz - Viajando pelo mundo!</title>
     </Head>
     <ThemeProvider theme={theme}>
     <GlobalStyle />
