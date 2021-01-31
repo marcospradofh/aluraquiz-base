@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import AlternativesForm from '../AlternativesForm';
 import Button from '../Button';
 import Widget from '../Widget';
 
@@ -17,15 +18,32 @@ export const ResultWidget = ({ results }) => (
   <Widget>
     <Widget.Content>
       <h3>Tela de resultados</h3>
+      <p>
+        Você acertou
+        {' '}
+        {results.reduce((acu, atu) => {
+          atu === true && acu++;
+          return acu;
+        }, 0)}
+      </p>
       <ul>
-        {results.map((result) => (<li>{result}</li>))}
+        Resultados:
+        {results.map((result, index) => (
+          <li key={`result__${result}`}>
+            #
+            {' '}
+            {index + 1}
+            {' '}
+            {result === true ? 'Acertou' : 'Errou'}
+          </li>
+        ))}
       </ul>
     </Widget.Content>
   </Widget>
 );
 
 function QuestionWidget({
-  totalQuestions, question, questionIndex, onSubmit,
+  totalQuestions, question, questionIndex, onSubmit, addResult,
 }) {
   const [selectedAlternative, setSelectedAlternative] = React.useState();
   const [isQuestionSubmited, setIsQuestionSubmited] = React.useState(false);
@@ -49,10 +67,11 @@ function QuestionWidget({
         }}
       />
       <Widget.Content>
-        <form onSubmit={(event) => {
+        <AlternativesForm onSubmit={(event) => {
           event.preventDefault();
           setIsQuestionSubmited(true);
           setTimeout(() => {
+            addResult(isCorrect);
             onSubmit();
             setIsQuestionSubmited(false);
             setSelectedAlternative(undefined);
@@ -65,13 +84,18 @@ function QuestionWidget({
           </p>
           {question.alternatives.map((alternative, alternativeIndex) => {
             const alternativeId = `alternative__${alternativeIndex}`;
+            const alternativeStatus = isCorrect ? 'SUCESS' : 'ERROR';
+            const isSelected = selectedAlternative === alternativeIndex;
             return (
               <Widget.Topic
                 key={alternativeId}
                 as="label"
                 htmlFor={alternativeId}
+                data-selected={isSelected}
+                data-status={isQuestionSubmited && alternativeStatus}
               >
                 <input
+                  style={{ display: 'none' }}
                   id={alternativeId}
                   name={questionId}
                   type="radio"
@@ -89,7 +113,7 @@ function QuestionWidget({
           </Button>
           {isQuestionSubmited && isCorrect && <p>Você acertou</p>}
           {isQuestionSubmited && !isCorrect && <p>Você errou</p>}
-        </form>
+        </AlternativesForm>
       </Widget.Content>
     </Widget>
   );

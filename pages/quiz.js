@@ -7,8 +7,6 @@ import QuestionWidget, { LoadingWidget, ResultWidget } from '../src/components/Q
 
 import db from '../db.json';
 
-const [results, setResults] = React.useState([true, false]);
-
 const screenStates = {
   quiz: 'QUIZ',
   loading: 'LOADING',
@@ -16,10 +14,16 @@ const screenStates = {
 };
 
 function QuizPage() {
-  const [screenState, setScreenState] = React.useState(screenStates.result);
-
+  const [results, setResults] = React.useState([]);
+  const [screenState, setScreenState] = React.useState(screenStates.loading);
   const [questionIndex, setQuestionIndex] = React.useState(0);
 
+  function addResult(result) {
+    setResults([
+      ...results,
+      result,
+    ]);
+  }
   function handleSubmit() {
     const nextQuestion = questionIndex + 1;
     if (nextQuestion < db.questions.length) {
@@ -29,9 +33,9 @@ function QuizPage() {
     }
   }
 
-  /* React.useEffect(() => {
+  React.useEffect(() => {
     setTimeout(() => setScreenState(screenStates.quiz), 1 * 1000);
-  }, []); */
+  }, []);
 
   return (
     <QuizBackground backgroundImage={db.bg}>
@@ -43,6 +47,7 @@ function QuizPage() {
           question={db.questions[questionIndex]}
           totalQuestions={db.questions.length}
           onSubmit={handleSubmit}
+          addResult={addResult}
         />
         )}
         {screenState === screenStates.loading && <LoadingWidget />}
